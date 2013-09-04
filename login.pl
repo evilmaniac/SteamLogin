@@ -4,12 +4,6 @@
 # Written by evilmaniac
 # http://www.evilmania.net
 
-# Log:
-# Valve server returns "Invalid Login" error
-# key generation may be invalid.
-# O- Key generated has been confirmed to be constant
-#    when the modulus and exponent remain constant
-
 use warnings;
 use bigint qw/hex oct/;
 use JSON; # libjson-perl
@@ -19,14 +13,14 @@ use MIME::Base64;
 use Crypt::OpenSSL::RSA;
 use Crypt::OpenSSL::Bignum;
 
-my $sUsername = '';
+my $sUsername = 'evilmaniac';
 my $sPassword = '';
 my %sJSON;
 
 my $sUserAgent = LWP::UserAgent->new();
 my $sResponse   = $sUserAgent->post('https://steamcommunity.com/login/getrsakey/', {'username' => $sUsername});
 if($sResponse->is_success()){
-	%sJSON = %{ decode_json($sResponse->decoded_content) };		
+	%sJSON = %{ decode_json($sResponse->decoded_content) };
 }
 
 my $modulus 	= Crypt::OpenSSL::Bignum->new_from_hex( $sJSON{'publickey_mod'} );
@@ -35,6 +29,7 @@ my $rsa = Crypt::OpenSSL::RSA->new_key_from_parameters($modulus, $exponent);
 $rsa->use_pkcs1_padding();
 
 my $sEncryptedPassword = encode_base64($rsa->encrypt($sPassword));
+$sEncryptedPassword =~ s/\n//g; # Strip out newlines added into the encrypted string
 
 my %hPayload  = (
 		'redir' 	=> 'http://steamcommunity.com/actions/RedirectToHome',
