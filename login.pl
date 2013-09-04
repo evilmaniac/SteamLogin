@@ -1,5 +1,15 @@
 #!/usr/bin/perl
 
+# eM-SteamLogin
+# Written by evilmaniac
+# http://www.evilmania.net
+
+# Log:
+# Valve server returns "Invalid Login" error
+# key generation may be invalid.
+# O- Key generated has been confirmed to be constant
+#    when the modulus and exponent remain constant
+
 use warnings;
 use bigint qw/hex oct/;
 use JSON; # libjson-perl
