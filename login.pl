@@ -13,7 +13,7 @@ use MIME::Base64;
 use Crypt::OpenSSL::RSA;
 use Crypt::OpenSSL::Bignum;
 
-my $sUsername = 'evilmaniac';
+my $sUsername = '';
 my $sPassword = '';
 my %sJSON;
 
